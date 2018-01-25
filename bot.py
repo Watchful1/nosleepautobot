@@ -430,19 +430,9 @@ class AutoBot(object):
     def post_series_reminder(self, submission):
         series_message = "It looks like there may be more to this story. Click [here]({}) to get a reminder to check back later. Comment replies will be ignored by me."
 
-        base_url = 'https://www.reddit.com/message/compose?'
-        query = {
-            'to': 'UpdateMeBot',
-            'subject': 'Subscribe',
-            'message': (u"SubscribeMe! /r/nosleep /u/{0}\n\n".format(str(submission.author)))
-        }
+        message_url = 'https://www.reddit.com/message/compose/?to=UpdateMeBot&subject=Subscribe&message=SubscribeMe!%20/r/nosleep%20/u/{}'.format(str(submission.author))
 
-        # urllib doesn't do well with non-ascii characters
-        encoded_query = {}
-        for k, v in query.iteritems():
-            encoded_query[k] = unicode(v).encode('utf-8')
-
-        series_comment = series_message.format(base_url + urllib.urlencode(encoded_query))
+        series_comment = series_message.format(message_url)
         comment = submission.reply(series_comment)
         comment.mod.distinguish(sticky=True)
 
